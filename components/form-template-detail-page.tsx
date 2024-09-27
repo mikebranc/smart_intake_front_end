@@ -45,9 +45,10 @@ type FormValues = z.infer<typeof formSchema>
 
 interface FormTemplateDetailPageProps {
   template?: FormValues & { id: string }
+  isNewTemplate: boolean  // New prop to indicate if it's a new template
 }
 
-export function FormTemplateDetailPageComponent({ template }: FormTemplateDetailPageProps) {
+export function FormTemplateDetailPageComponent({ template, isNewTemplate }: FormTemplateDetailPageProps) {
   const router = useRouter()
   const [showOptions, setShowOptions] = useState<boolean[]>([])
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -101,7 +102,7 @@ export function FormTemplateDetailPageComponent({ template }: FormTemplateDetail
 
     try {
       let response;
-      if (template?.id) {
+      if (!isNewTemplate && template?.id) {
         response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/forms/templates/${template.id}`, {
           method: 'PUT',
           headers: {
@@ -127,9 +128,9 @@ export function FormTemplateDetailPageComponent({ template }: FormTemplateDetail
       const result = await response.json();
       console.log(template?.id ? 'Template updated:' : 'New template created:', result);
       router.push('/templates'); // Redirect to templates page after successful submission
-    } catch (err) {
+    } catch (err: unknown) {
       console.error('Error submitting form:', err);
-      setError(`An error occurred while submitting the form: ${err.message}`);
+      setError(`An error occurred while submitting the form: ${err instanceof Error ? err.message : 'Unknown error'}`);
     } finally {
       setIsSubmitting(false);
     }
@@ -165,7 +166,7 @@ export function FormTemplateDetailPageComponent({ template }: FormTemplateDetail
         <ArrowLeft className="mr-2 h-4 w-4" /> Back to Templates
       </Button>
       <h1 className="text-3xl font-bold mb-6">
-        {template ? 'Edit Form Template' : 'Create Form Template'}
+        {isNewTemplate ? 'Create Form Template' : 'Edit Form Template'}
       </h1>
       {error && <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4" role="alert">{error}</div>}
       <form className="space-y-8">
@@ -289,7 +290,7 @@ export function FormTemplateDetailPageComponent({ template }: FormTemplateDetail
           disabled={isSubmitting}
           onClick={handleButtonClick}
         >
-          {isSubmitting ? 'Submitting...' : (template ? 'Update Template' : 'Create Template')}
+          {isSubmitting ? 'Submitting...' : (isNewTemplate ? 'Create Template' : 'Update Template')}
         </Button>
       </form>
     </div>

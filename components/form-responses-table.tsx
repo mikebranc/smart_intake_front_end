@@ -17,6 +17,7 @@ interface FormResponse {
   id: string
   response: string
   template_id: string
+  template_name: string // Add this line
   submitted_at: string
 }
 
@@ -30,7 +31,7 @@ export function FormResponsesTableComponent({ responses }: FormResponsesTablePro
       <TableHeader>
         <TableRow>
           <TableHead>Response</TableHead>
-          <TableHead>Template ID</TableHead>
+          <TableHead>Template Name</TableHead>
           <TableHead>Submitted At</TableHead>
           <TableHead>Action</TableHead>
         </TableRow>
@@ -39,7 +40,11 @@ export function FormResponsesTableComponent({ responses }: FormResponsesTablePro
         {responses.map((response) => (
           <TableRow key={response.id}>
             <TableCell>{`Response ${response.id}`}</TableCell>
-            <TableCell>{response.template_id}</TableCell>
+            <TableCell>
+              <Link href={`/templates/${response.template_id}`} className="text-blue-600 hover:underline">
+                {response.template_name}
+              </Link>
+            </TableCell>
             <TableCell>{formatDistanceToNow(new Date(response.submitted_at), { addSuffix: true })}</TableCell>
             <TableCell>
               <Button asChild>

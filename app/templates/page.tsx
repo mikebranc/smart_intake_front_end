@@ -1,4 +1,5 @@
 'use client'
+import { useState, useEffect } from 'react'
 import { FormTemplate } from '../types'
 import { FormTemplatesTableComponent } from '../../components/form-templates-table'
 import Link from 'next/link'
@@ -12,9 +13,30 @@ async function getFormTemplates(): Promise<FormTemplate[]> {
   return res.json()
 }
 
-export default async function FormTemplates() {
-  const templates = await getFormTemplates()
-  console.log(templates)
+export default function FormTemplates() {
+  const [templates, setTemplates] = useState<FormTemplate[]>([])
+  const [error, setError] = useState<string | null>(null)
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    async function fetchTemplates() {
+      try {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/forms/templates`, { cache: 'no-store' })
+        if (!res.ok) {
+          throw new Error('Failed to fetch form templates')
+        }
+        const data = await res.json()
+        setTemplates(data)
+      } catch (err) {
+        console.error('Error fetching templates:', err)
+        setError('Failed to load templates. Please try again later.')
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchTemplates()
+  }, [])
 
   const onDelete = async (id: string) => {
     try {
@@ -58,6 +80,14 @@ export default async function FormTemplates() {
       console.error('Error setting current template:', error);
       // Handle the error (e.g., show an error message to the user)
     }
+  }
+
+  if (loading) {
+    return <div>Loading...</div>
+  }
+
+  if (error) {
+    return <div className="text-red-500">{error}</div>
   }
 
   return (

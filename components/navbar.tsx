@@ -10,7 +10,7 @@ export function NavbarComponent() {
   const [isOpen, setIsOpen] = useState(false)
   const pathname = usePathname()
 
-  const NavLink = ({ href, children }) => {
+  const NavLink = ({ href, children }: { href: string; children: React.ReactNode }) => {
     const isActive = pathname === href
     return (
       <Link
@@ -34,6 +34,7 @@ export function NavbarComponent() {
             <div className="flex space-x-8">
               <NavLink href="/responses">Form Responses</NavLink>
               <NavLink href="/templates">Form Templates</NavLink>
+              <NavLink href="/live-chat">Live Chat</NavLink>
             </div>
           </div>
           
@@ -68,6 +69,7 @@ export function NavbarComponent() {
           <div className="pt-2 pb-3 space-y-1">
             <NavLink href="/responses">Form Responses</NavLink>
             <NavLink href="/templates">Form Templates</NavLink>
+            <NavLink href="/live-chat">Live Chat</NavLink>
           </div>
         </div>
       )}

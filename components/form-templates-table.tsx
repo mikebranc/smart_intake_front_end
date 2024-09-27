@@ -11,6 +11,7 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import Link from 'next/link'
+import { compareDesc } from 'date-fns'
 
 interface FormTemplate {
   id: string
@@ -28,6 +29,10 @@ interface FormTemplatesTableProps {
 }
 
 export function FormTemplatesTableComponent({ templates, onDelete, onSetCurrent }: FormTemplatesTableProps) {
+  const sortedTemplates = [...templates].sort((a, b) => 
+    compareDesc(new Date(a.created_at), new Date(b.created_at))
+  )
+
   return (
     <Table>
       <TableHeader>
@@ -41,7 +46,7 @@ export function FormTemplatesTableComponent({ templates, onDelete, onSetCurrent 
         </TableRow>
       </TableHeader>
       <TableBody>
-        {templates.map((template) => (
+        {sortedTemplates.map((template) => (
           <TableRow key={template.id}>
             <TableCell>{template.name}</TableCell>
             <TableCell>{template.description}</TableCell>
@@ -54,9 +59,9 @@ export function FormTemplatesTableComponent({ templates, onDelete, onSetCurrent 
                   <Button>Edit</Button>
                 </Link>
                 <Button variant="destructive" onClick={() => onDelete(template.id)}>Delete</Button>
-                {!template.is_current && (
+                {/* {!template.is_current && (
                   <Button variant="outline" onClick={() => onSetCurrent(template.id)}>Set as Current</Button>
-                )}
+                )} */}
               </div>
             </TableCell>
           </TableRow>
