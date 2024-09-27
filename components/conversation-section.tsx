@@ -2,6 +2,7 @@
 
 import React from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { parseISO, compareAsc } from 'date-fns'
 
 interface ConversationEntry {
   id: number
@@ -15,6 +16,11 @@ interface ConversationSectionProps {
 }
 
 export default function ConversationSectionComponent({ entries }: ConversationSectionProps) {
+  // Sort entries by created_at
+  const sortedEntries = [...entries].sort((a, b) => 
+    compareAsc(parseISO(a.created_at), parseISO(b.created_at))
+  )
+
   return (
     <Card className="w-full mt-8">
       <CardHeader>
@@ -22,7 +28,7 @@ export default function ConversationSectionComponent({ entries }: ConversationSe
       </CardHeader>
       <CardContent>
         <div className="space-y-4">
-          {entries.map((entry) => (
+          {sortedEntries.map((entry) => (
             <React.Fragment key={entry.id}>
               {entry.voice_input && (
                 <div className="flex justify-end">
