@@ -1,10 +1,83 @@
-# Links
+# Smart Intake Application
+
+This project is a smart intake application that allows users to set up intake form templates and complete them over the phone. It combines a Next.js frontend with a FastAPI backend, leveraging Twilio, Langchain, and OpenAI to provide an intelligent, voice-based form completion experience.
+
 🔗 [Demo](https://drive.google.com/file/d/1OS5fySWRzfcBmNQKfG8dr0uR5Ryydpm2/view?usp=drive_link)
 <br/>
-🔗 [Backend](https://github.com/mikebranc/smart_intake_backend)
-<br/>
-<br/>
-<br/>
+🔗 [Backend Repository](https://github.com/mikebranc/smart_intake_backend)
+
+## Features
+
+- Create and manage intake form templates
+- Voice-based form completion over the phone
+- AI-powered conversation flow using OpenAI and Langchain (done in backend)
+- View and manage form responses
+- Integration with Twilio for phone call handling (done in backend)
+
+## Application Flow
+
+1. **Form Templates Management** (`app/templates/page.tsx`)
+   - View a list of existing form templates
+   - Create new templates
+   - Edit existing templates
+   - Set a template as current for use in phone calls
+
+2. **New Template Creation** (`app/templates/new/page.tsx`)
+   - Interface for creating a new form template
+
+3. **Template Details** (`app/templates/[id]/page.tsx`)
+   - View and edit details of a specific form template
+
+4. **Form Responses** (`app/responses/page.tsx`)
+   - View a list of all form responses
+   - Access detailed information for each response
+
+5. **Response Details** (`app/responses/[id]/page.tsx`)
+   - View detailed information about a specific form response
+   - See the associated conversation thread and messages
+
+6. **Live Chat** (`app/live-chat/page.tsx`)
+   - Development tool for viewing real-time updates of ongoing phone conversations
+
+## Key Components
+
+- `FormTemplatesTableComponent`: Displays a table of form templates with options to edit, delete, and set as current.
+- `FormTemplateDetailPageComponent`: Handles the creation and editing of form templates.
+- `FormResponsesTableComponent`: Shows a table of form responses.
+- `FormDetailsPageComponent`: Displays detailed information about a form response, including the conversation thread.
+- `ConversationSectionComponent`: Renders the conversation thread between the user and the AI assistant.
+
+## Backend Integration
+
+The FastAPI backend handles:
+- Twilio integration for phone calls
+- AI processing using OpenAI and Langchain
+- Storage and retrieval of form templates and responses
+
+## Getting Started
+
+To run this project locally:
+
+1. Clone this repository
+2. Install dependencies: `npm install`
+3. Set up your environment variables:
+   - Create a `.env.local` file in the root directory
+   - Add `NEXT_PUBLIC_BACKEND_URL=<your_backend_url>` to the file
+4. Run the development server: `npm run dev`
+
+Make sure to also set up and run the backend server. Refer to the [backend repository](https://github.com/mikebranc/smart_intake_backend) for instructions.
+
+## Environment Variables
+
+- `NEXT_PUBLIC_BACKEND_URL`: The URL of your FastAPI backend service.
+
+## Future Improvements
+
+- Add user authentication and authorization
+- Implement a dashboard for managing multiple intake form templates
+- Enhance the AI model for more accurate and context-aware responses
+- Improve error handling and provide better user feedback
+- Implement real-time updates using WebSockets instead of polling
 
 
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
